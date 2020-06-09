@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Report Hub</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+
+<body>
+<div class="container-fluid">
+    Welcome to ReportHub
+    <div class="row container-fluid">
+        <div class="col-lg-3">
+            <button class="btn btn-primary" onclick="loadReports()">Refresh</button>
+            <input type="search" id="search" placeholder="Search reports" class="form-control">
+            <ul class="list-group" id="reports_list" style="list-style-type: none">
+            </ul>
+        </div>
+        <div class="col-lg-4">
+            <h3>Content</h3>
+            <pre id="content"></pre>
+        </div>
+        <div class="col-lg-5">
+            <h3>History</h3>
+            <pre id="history"></pre>
+        </div>
+    </div>
+</div>
+
+{#When the user clicks on a report from the list display it's content#}
+<script>
+    function displayContent(key) {
+        $.ajax({
+            type: "GET",
+            data: {
+                "name": key
+            },
+            url: 'content',
+            success: function (data) {
+                const jsonObject = JSON.parse(JSON.stringify(data))
+                $("#content").text(JSON.stringify(jsonObject, null, '\t'));
+            }
+        })
+    }
+</script>
+
+{#Make a call for getting all reports#}
+<script>
+    $(document).ready(loadReports());
+
+    function loadReports() {
+        $.ajax({
+            type: "GET",
+            url: 'all_reports',
+            success: function (data) {
+                generateReportsList(data)
+            }
+        })
+    }
+</script>
+
+{#Accept a list of reports that need to be displayed and appends to the ul#}
+<script>
+    function generateReportsList(data) {
+        const jsonObject = JSON.parse(JSON.stringify(data));
+        let className;
+        $("#reports_list").empty();
+        jQuery.each(jsonObject, function (name, body) {
+            if (JSON.stringify(body["status"]) === "\"passed\"") {
+                className = "list-group-item-success";
+            } else {
+                className = "list-group-item-danger";
+            }
+            $("#reports_list").append("<li class=' " + className + "' onclick='displayContent(\"" + name
+                + "\");loadHistory(\"" + name + "\")'>" + name + "</li>");
+        });
+    }
+</script>
+
+{#Load the history of the scenario#}
+<script>
+    function loadHistory(name) {
+        $.ajax({
+            type: "GET",
+            data: {
+                "name": name
+            },
+            url: 'history',
+            success: function (data) {
+                $("#history").text(JSON.stringify(data, null, '\t'));
+            }
+        })
+    }
+</script>
+
+{#Search reports#}
+<script>
+    $(document).ready(function () {
+        $("#search").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            console.log(value)
+            $("#reports_list li").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+</body>
+</html>

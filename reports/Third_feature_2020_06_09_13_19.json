@@ -1,0 +1,1 @@
+{"name": "Third feature", "feature": "Third feature", "status": "passed", "steps": ["the user logs in", "the user does something", "the user gets a result"], "tags": ["pe6o"], "duration": 0.0009772777557373047, "hook_failed": false, "file": "tests/features/third.feature", "failed_step": null, "error_message": null}
