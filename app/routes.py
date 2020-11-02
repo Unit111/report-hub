@@ -6,7 +6,7 @@ from flask import Flask, render_template, session, request, jsonify
 from app.config import Config
 from app.helpers import collect_files
 
-app = Flask(__name__, static_url_path=os.path.join(os.getcwd(), 'app', 'templates', 'static'))
+app = Flask(__name__, static_url_path='/static')
 app.config.from_object(Config())
 
 
