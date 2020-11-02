@@ -1,4 +1,3 @@
-import ast
 import re
 
 from flask import Flask, render_template, session, request, jsonify
@@ -7,8 +6,7 @@ from flask_bootstrap import Bootstrap
 from app.config import Config
 from app.helpers import collect_files
 
-app = Flask(__name__)
-Bootstrap(app)
+app = Flask(__name__, static_url_path='/static')
 app.config.from_object(Config())
 
 
