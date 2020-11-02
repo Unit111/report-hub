@@ -10,6 +10,16 @@ app = Flask(__name__, static_url_path='/static')
 app.config.from_object(Config())
 
 
+@app.after_request
+def add_header(response):
+    """ Invalidates browser cache instantly to avoid problems
+    with static contect
+    """
+    response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
+    response.headers['Cache-Control'] = 'public, max-age=0'
+    return response
+
+
 @app.route('/')
 def index():
     return render_template("index.html")
