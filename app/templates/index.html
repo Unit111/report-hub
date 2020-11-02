@@ -9,7 +9,10 @@
 
 <body>
 <div class="container-fluid">
-    Welcome to ReportHub
+    <div class="row justify-content-center align-items-center">
+        <img src="{{ url_for('static', filename='logo.png') }}" width="200"
+             height="100" alt="logo">
+    </div>
     <div class="row container-fluid">
         <div class="col-lg-3">
             <button class="btn btn-primary" onclick="loadReports()">Refresh</button>
@@ -106,5 +109,7 @@
         });
     });
 </script>
+
+{#Return formatted scenario#}
 </body>
 </html>
