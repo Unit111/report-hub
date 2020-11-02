@@ -12,11 +12,9 @@ app.config.from_object(Config())
 
 @app.after_request
 def add_header(response):
-    """ Invalidates browser cache instantly to avoid problems
-    with static contect
-    """
     response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
-    response.headers['Cache-Control'] = 'public, max-age=0'
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
     return response
 
 
